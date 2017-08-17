@@ -19,7 +19,7 @@ __version__ = '1.4.0'
 
 BUILDOUT_URL = ('https://raw.githubusercontent.com/buildout/'
                 'buildout/master/bootstrap/bootstrap.py')
-ERP_CFG = 'etc/openerp.cfg'
+ERP_CFG = 'etc/odoo.cfg'
 BUILDOUT_FILE = "buildout.%s.cfg"
 WORKSPACE = '/workspace/'
 MODULE_FOLDER = WORKSPACE + 'parts/'
@@ -101,7 +101,7 @@ class AkRun(AkSub):
         return super(AkRun, self)._parse_args(argv)
 
     def main(self):
-        return self._exec('bin/start_openerp', self.argv)
+        return self._exec('bin/start_odoo', self.argv)
 
 
 @Ak.subcommand("console")
@@ -109,7 +109,7 @@ class AkConsole(AkSub):
     """Start a python console."""
 
     def main(self):
-        return self._exec('bin/python_openerp')
+        return self._exec('bin/python_odoo')
 
 
 @Ak.subcommand("upgrade")
@@ -136,7 +136,7 @@ class AkUpgrade(AkSub):
             params += self._get_log_params()
         if self.db:
             params += ['-d', self.db]
-        return self._exec('bin/upgrade_openerp', params)
+        return self._exec('bin/upgrade_odoo', params)
 
 
 class AkBuildFreeze(AkSub):
@@ -186,7 +186,7 @@ class AkFreeze(AkBuildFreeze):
     def main(self):
         self._exec(
             'bin/buildout',
-            ['-c', self.config, '-o', 'openerp:freeze-to=frozen.cfg'])
+            ['-c', self.config, '-o', 'odoo:freeze-to=frozen.cfg'])
 
 
 @Ak.subcommand("db")
@@ -333,7 +333,7 @@ class AkDiff(cli.Application):
             # Skip voodoo folder (module path) and do not consider double paths
             # for odoo
             if path.startswith(MODULE_FOLDER) and not\
-                    path.endswith('openerp/addons'):
+                    path.endswith('odoo/addons'):
                 print "\n"
                 print "".ljust(100, '~')
                 print ("~~~ Scanning folder %s" % path).ljust(100, '~')
@@ -456,7 +456,7 @@ class AkModuleTest(AkSub):
             createdb(db)
             params += ['-i', module]
         params += ['--stop-after-init', '--test-enable']
-        cmd = 'bin/start_openerp'
+        cmd = 'bin/start_odoo'
         return self._exec(cmd, params)
 
 
